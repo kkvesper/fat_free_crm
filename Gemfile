@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'sqlite3'
-gem 'rails',               '~> 5.0.0'
+gem 'rails',               '~> 5.1.0'
 gem 'rails-observers'
+gem 'rails-i18n'
 gem 'sprockets-rails',     '>= 3.0.0'
 gem 'responders',          '~> 2.0'
 gem 'jquery-rails'
@@ -31,16 +32,15 @@ gem 'thor'
 gem 'rails_autolink'
 gem 'coffee-script-source', '~> 1.8', '>= 1.8.0' # pegged until https://github.com/jashkenas/coffeescript/issues/3829 is resolved
 gem 'country_select'
+gem 'rb-readline'
+gem 'nokogiri', '>= 1.6.8'
+gem 'premailer', require: false
 
 # FatFreeCRM has released it's own versions of the following gems:
 #-----------------------------------------------------------------
 gem 'ransack_ui',          '~> 1.3', '>= 1.3.1'
 gem 'ransack',             '~> 1.7', '>= 1.6.2'
 gem 'email_reply_parser_ffcrm'
-
-# Remove premailer auto-require
-gem 'nokogiri', '>= 1.6.8'
-gem 'premailer', require: false
 
 # Remove fat_free_crm dependency, to stop it from being auto-required too early.
 # remove 'fat_free_crm'
@@ -79,7 +79,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'database_cleaner'
   gem 'acts_as_fu'
-  # gem 'zeus' unless ENV['CI']
+  gem 'zeus', platform: :ruby unless ENV['CI']
   gem 'timecop'
 end
 

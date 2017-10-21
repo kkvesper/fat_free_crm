@@ -22,6 +22,7 @@ namespace :license do
   ],
             js: [
               "app/assets/javascripts/**/*.js",
+              "app/assets/javascripts/**/*.js.erb",
               "app/assets/stylesheets/**/*.sass", # Sass also uses javascript style comments
               "app/assets/stylesheets/**/*.scss"
             ],
@@ -40,9 +41,9 @@ namespace :license do
                css: LICENSE_RB.gsub(/^# Fat Free/, "/*\n * Fat Free")
                     .gsub(/^#/, " \*").sub(/---\n/, "---\n */") }
 
-  REGEXPS  = { ruby: /^# Fat Free CRM\n# Copyright \(C\).*?\n(#.*\n)*#-{10}-*\n*/,
-               js: /^\/\/ Fat Free CRM\n\/\/ Copyright \(C\).*?\n(\/\/.*\n)*\/\/-{10}-*\n*/,
-               css: /^\/\*\n \* Fat Free CRM\n \* Copyright \(C\).*?\n( \*.*\n)* \*-{10}-*\n \*\/\n*/ }
+  REGEXPS  = { ruby: /^# Copyright \(c\).*?\n(#.*\n)*?#-{10}-*\n/,
+               js: /^\/\/ Copyright \(c\).*?\n(\/\/.*\n)*?\/\/-{10}-*\n/,
+               css: /^(?:\*|\\) Copyright \(c\).*?\n( \*.*\n)*? \*-{10}-*\n \*\/\n/ }
 
   def expand_globs(globs)
     globs.map { |f| Dir.glob(f) }.flatten.uniq
