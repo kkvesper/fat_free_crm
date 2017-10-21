@@ -7,12 +7,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe UsersController do
   describe "routing" do
-    it "doesn't recognize #index" do
-      expect(get: "/users").not_to be_routable
+    it "recognizes #index" do
+      expect(get: "/users").to route_to(controller: "users", action: "index")
     end
 
     it "recognizes and generates #new as /signup" do
-      expect(get: "/signup").to route_to(controller: "users", action: "new")
+      expect(get: "/signup").to route_to(controller: "registrations", action: "new")
     end
 
     it "recognizes and generates #show as /profile" do
@@ -28,7 +28,7 @@ describe UsersController do
     end
 
     it "recognizes and generates #create" do
-      expect(post: "/users").to route_to(controller: "users", action: "create")
+      expect(post: "/users").to route_to(controller: "registrations", action: "create")
     end
 
     it "recognizes and generates #update" do

@@ -9,7 +9,7 @@ describe "/users/avatar" do
   include UsersHelper
 
   before do
-    login_and_assign
+    login
     assign(:user, current_user)
   end
 

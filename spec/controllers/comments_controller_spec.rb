@@ -9,7 +9,7 @@ describe CommentsController do
   COMMENTABLE = [:account, :campaign, :contact, :lead, :opportunity].freeze
 
   before(:each) do
-    require_user
+    login
   end
 
   # GET /comments

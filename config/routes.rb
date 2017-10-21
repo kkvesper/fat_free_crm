@@ -8,12 +8,24 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  devise_for :users, controllers: {registrations: 'registrations',
+                                   sessions: 'sessions', passwords: 'passwords',
+                                   confirmations: 'confirmations'}
+
+  devise_scope :user do
+    resources :users, only: [:index, :show]
+    get 'login', to: 'sessions#new', as: :new_user_session
+    get 'logout', to: 'sessions#destroy', as: :logout
+    get 'signup', to: 'registrations#new'
+    post 'signup', to: 'registrations#create', as: :user_registration
+    get 'passwords', to: 'passwords#new', as: :new_user_password
+    post 'passwords', to: 'passwords#create', as: :user_password
+    resources :passwords, only: [:edit, :update]
+  end
+
   get 'activities' => 'home#index'
-  get 'admin'      => 'admin/users#index',       :as => :admin
-  get 'login'      => 'authentications#new',     :as => :login
-  delete 'logout'  => 'authentications#destroy', :as => :logout
-  get 'profile'    => 'users#show',              :as => :profile
-  get 'signup'     => 'users#new',               :as => :signup
+  get 'admin'      => 'admin/users#index',       as: :admin
+  get 'profile'    => 'users#show',              as: :profile
 
   get '/home/options',  as: :options
   get '/home/toggle',   as: :toggle
@@ -137,7 +149,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, id: /\d+/, except: [:index, :destroy] do
+  resources :users, id: /\d+/, except: [:index, :destroy, :create] do
     member do
       get :avatar
       get :password

@@ -10,7 +10,7 @@ describe HomeController do
   #----------------------------------------------------------------------------
   describe "responding to GET /" do
     before(:each) do
-      require_user
+      login
     end
 
     it "should get a list of activities" do

@@ -4,7 +4,6 @@
 # See MIT-LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
 class TasksController < ApplicationController
-  before_action :require_user
   before_action :set_current_tab, only: [:index, :show]
   before_action :update_sidebar, only: :index
 
@@ -38,7 +37,7 @@ class TasksController < ApplicationController
 
     if params[:related]
       model, id = params[:related].split(/_(\d+)/)
-      if related = model.classify.constantize.my.find_by_id(id)
+      if related = model.classify.constantize.my(current_user).find_by_id(id)
         instance_variable_set("@asset", related)
       else
         respond_to_related_not_found(model) && return

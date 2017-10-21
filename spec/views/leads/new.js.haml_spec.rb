@@ -9,7 +9,7 @@ describe "/leads/new" do
   include LeadsHelper
 
   before do
-    login_and_assign
+    login
     @campaign = FactoryGirl.build_stubbed(:campaign)
     assign(:lead, Lead.new(user: current_user))
     assign(:users, [current_user])

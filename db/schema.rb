@@ -402,6 +402,7 @@ ActiveRecord::Schema.define(version: 20160511053730) do
   add_index "tasks", ["user_id", "name", "deleted_at"], name: "index_tasks_on_user_id_and_name_and_deleted_at", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
+
     t.string   "username",            limit: 32,  default: "",    null: false
     t.string   "email",               limit: 254, default: "",    null: false
     t.string   "first_name",          limit: 32
@@ -417,25 +418,28 @@ ActiveRecord::Schema.define(version: 20160511053730) do
     t.string   "skype",               limit: 32
     t.string   "password_hash",                   default: "",    null: false
     t.string   "password_salt",                   default: "",    null: false
-    t.string   "persistence_token",               default: "",    null: false
-    t.string   "perishable_token",                default: "",    null: false
-    t.datetime "last_login_at"
-    t.datetime "current_login_at"
-    t.string   "last_login_ip"
-    t.string   "current_login_ip"
-    t.integer  "login_count",                     default: 0,     null: false
+    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at"
+    t.string   "last_sign_in_ip"
+    t.string   "current_sign_in_ip"
+    t.integer  "sign_in_count",                   default: 0,     null: false
     t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "admin",                           default: false, null: false
     t.datetime "suspended_at"
-    t.string   "single_access_token"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.string   "remember_token"
+    t.datetime "remember_created_at"
+    t.string   "authentication_token"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", using: :btree
-  add_index "users", ["perishable_token"], name: "index_users_on_perishable_token", using: :btree
-  add_index "users", ["persistence_token"], name: "index_users_on_persistence_token", using: :btree
-  add_index "users", ["username", "deleted_at"], name: "index_users_on_username_and_deleted_at", unique: true, using: :btree
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["username", "deleted_at"], :name => "index_users_on_username_and_deleted_at", :unique => true
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",                  null: false

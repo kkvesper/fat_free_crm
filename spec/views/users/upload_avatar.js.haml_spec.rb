@@ -9,7 +9,7 @@ describe "/users/upload_avatar" do
   include UsersHelper
 
   before do
-    login_and_assign
+    login
   end
 
   describe "no errors:" do
