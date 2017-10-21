@@ -30,7 +30,7 @@ require 'spec_helper'
 
 describe Task do
 
-  let!(:current_user) { FactoryGirl.create :user }
+  let(:current_user) { FactoryGirl.create(:user) }
 
   describe "Task/Create" do
     it "should create a new task instance given valid attributes" do

@@ -402,7 +402,6 @@ ActiveRecord::Schema.define(version: 20160511053730) do
   add_index "tasks", ["user_id", "name", "deleted_at"], name: "index_tasks_on_user_id_and_name_and_deleted_at", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-
     t.string   "username",            limit: 32,  default: "",    null: false
     t.string   "email",               limit: 254, default: "",    null: false
     t.string   "first_name",          limit: 32
@@ -416,7 +415,7 @@ ActiveRecord::Schema.define(version: 20160511053730) do
     t.string   "yahoo",               limit: 32
     t.string   "google",              limit: 32
     t.string   "skype",               limit: 32
-    t.string   "password_hash",                   default: "",    null: false
+    t.string   "encrypted_password",              default: "",    null: false
     t.string   "password_salt",                   default: "",    null: false
     t.datetime "last_sign_in_at"
     t.datetime "current_sign_in_at"
@@ -440,6 +439,10 @@ ActiveRecord::Schema.define(version: 20160511053730) do
 
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["username", "deleted_at"], :name => "index_users_on_username_and_deleted_at", :unique => true
+  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["remember_token"], :name => "index_users_on_remember_token", :unique => true
+  add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
+  add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",                  null: false

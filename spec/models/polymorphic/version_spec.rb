@@ -22,7 +22,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Version, versioning: true do
 
-  let!(:current_user) { FactoryGirl.create :user }
+  let(:current_user) { FactoryGirl.create(:user) }
   before { PaperTrail.whodunnit = current_user.id.to_s }
 
   it "should create a new instance given valid attributes" do

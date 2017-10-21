@@ -33,10 +33,8 @@ Rails.application.routes.draw do
   match '/home/timezone', as: :timezone, via: [:get, :put, :post]
   post '/home/redraw',   as: :redraw
 
-  resource :authentication, except: [:index, :edit]
   resources :comments,       except: [:new, :show]
   resources :emails,         only: [:destroy]
-  resources :passwords,      only: [:new, :create, :edit, :update]
 
   resources :accounts, id: /\d+/ do
     collection do

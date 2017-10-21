@@ -40,7 +40,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Contact do
 
-  let!(:current_user) { FactoryGirl.create :user }
+  let(:current_user) { FactoryGirl.create(:user) }
 
   it "should create a new instance given valid attributes" do
     Contact.create!(first_name: "Billy", last_name: "Bones")

@@ -22,14 +22,17 @@ class AuthlogicToDevise < ActiveRecord::Migration
     remove_column :users, :persistence_token
     remove_column :users, :single_access_token
     remove_column :users, :perishable_token
-    remove_column :users, :last_request_at
+
+    add_index :users, :reset_password_token, unique: true
+    add_index :users, :remember_token,       unique: true
+    add_index :users, :confirmation_token,   unique: true
+    add_index :users, :authentication_token, unique: true
   end
 
   def self.down
     add_column :users, :perishable_token, :string
     add_column :users, :single_access_token, :string
     add_column :users, :persistence_token, :string
-    add_column :users, :last_request_at, :timestamp
 
     rename_column :users, :encrypted_password, :password_hash
 

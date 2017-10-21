@@ -29,7 +29,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe Opportunity do
 
-  let!(:current_user) { FactoryGirl.create :user }
+  let(:current_user) { FactoryGirl.create(:user) }
 
   it "should create a new instance given valid attributes" do
     Opportunity.create!(name: "Opportunity", stage: 'analysis')
