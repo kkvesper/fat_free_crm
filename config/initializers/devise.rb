@@ -105,7 +105,7 @@ Devise.setup do |config|
   # a value less than 10 in other environments. Note that, for bcrypt (the default
   # algorithm), the cost increases exponentially with the number of stretches (e.g.
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
-  config.stretches = Rails.env.test? ? 1 : 11
+  # config.stretches = Rails.env.test? ? 1 : 11 # SEE BELOW
 
   # Set up a pepper to generate the hashed password.
   # config.pepper = SecureRandom.hex(64)
@@ -217,7 +217,10 @@ Devise.setup do |config|
   # stretches to 10, and copy REST_AUTH_SITE_KEY to pepper).
   #
   # Require the `devise-encryptable` gem when using anything other than bcrypt
-  # config.encryptor = :sha512
+
+  # Using :sha512 for backward compatibility with Authlogic gem
+  config.encryptor = :sha512
+  config.stretches = Rails.env.test? ? 1 : 20
 
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for

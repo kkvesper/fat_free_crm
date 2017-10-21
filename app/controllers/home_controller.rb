@@ -4,7 +4,7 @@
 # See MIT-LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
 class HomeController < ApplicationController
-  skip_action :authenticate_user!, only: [:toggle, :timezone]
+  skip_before_action :authenticate_user!, only: [:toggle, :timezone]
   before_action :set_current_tab, only: :index
 
   #----------------------------------------------------------------------------

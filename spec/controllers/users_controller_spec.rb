@@ -83,32 +83,6 @@ describe UsersController do
     end
   end
 
-  # GET /users/new
-  # GET /users/new.xml                                                     HTML
-  #----------------------------------------------------------------------------
-  describe "responding to GET new" do
-    describe "if user is allowed to sign up" do
-      it "should expose a new user as @user and render [new] template" do
-        expect(User).to receive(:can_signup?).and_return(true)
-        @user = FactoryGirl.build(:user)
-        allow(User).to receive(:new).and_return(@user)
-
-        get :new
-        expect(assigns[:user]).to eq(@user)
-        expect(response).to render_template("users/new")
-      end
-    end
-
-    describe "if user is not allowed to sign up" do
-      it "should redirect to login_path" do
-        expect(User).to receive(:can_signup?).and_return(false)
-
-        get :new
-        expect(response).to redirect_to(login_path)
-      end
-    end
-  end
-
   # GET /users/1/edit                                                      AJAX
   #----------------------------------------------------------------------------
   describe "responding to GET edit" do
@@ -133,50 +107,6 @@ describe UsersController do
       get :edit, params: { id: @user.id }, xhr: true
       expect(assigns[:user]).to eq(@user)
       expect(response).to render_template("users/edit")
-    end
-  end
-
-  # POST /users
-  # POST /users.xml                                                        HTML
-  #----------------------------------------------------------------------------
-  describe "responding to POST create" do
-    describe "with valid params" do
-      before(:each) do
-        @username = "none"
-        @email = @username + "@example.com"
-        @password = "secret"
-        @user = FactoryGirl.build(:user, username: @username, email: @email)
-        allow(User).to receive(:new).and_return(@user)
-      end
-
-      it "exposes a newly created user as @user and redirect to profile page" do
-        login_admin
-        post :create, params: { user: { username: @username, email: @email, password: @password, password_confirmation: @password } }
-        expect(assigns[:user]).to eq(@user)
-        expect(flash[:notice]).to match(/welcome/)
-        expect(response).to redirect_to(profile_path)
-      end
-
-      it "should redirect to login page if user signup needs approval" do
-        allow(Setting).to receive(:user_signup).and_return(:needs_approval)
-
-        post :create, params: { user: { username: @username, email: @email, password: @password, password_confirmation: @password } }
-        expect(assigns[:user]).to eq(@user)
-        expect(flash[:notice]).to match(/approval/)
-        expect(response).to redirect_to(login_path)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved user as @user and renders [new] template" do
-        login_admin
-        @user = FactoryGirl.build(:user, username: "", email: "")
-        allow(User).to receive(:new).and_return(@user)
-
-        post :create, params: { user: {} }
-        expect(assigns[:user]).to eq(@user)
-        expect(response).to render_template("users/new")
-      end
     end
   end
 

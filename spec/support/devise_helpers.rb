@@ -15,7 +15,7 @@ module DeviseHelpers
   end
 
   def perform_login(user)
-    user.confirm!
+    user.confirm
     user.update_attribute(:suspended_at, nil)
     sign_in user
   end

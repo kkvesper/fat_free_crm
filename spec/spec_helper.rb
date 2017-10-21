@@ -39,8 +39,8 @@ RSpec.configure do |config|
   # RSpec configuration options for Fat Free CRM.
   config.include RSpec::Rails::Matchers
   config.include FactoryGirl::Syntax::Methods
-  config.include Devise::TestHelpers, type: :controller
-  config.include Devise::TestHelpers, type: :view
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :view
   config.include Warden::Test::Helpers
   config.include DeviseHelpers
   config.include FeatureHelpers

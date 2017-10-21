@@ -9,13 +9,13 @@ module FeatureHelpers
 
   def do_login(options = {})
     @user = create(:user, options)
-    @user.confirm!
+    @user.confirm
     @user.update_attribute(:suspended_at, nil)
     login_as(@user)
   end
 
   def login_as_user(user)
-    user.confirm!
+    user.confirm
     user.update_attribute(:suspended_at, nil)
     visit '/login'
     fill_in "user[username]", with: user.username

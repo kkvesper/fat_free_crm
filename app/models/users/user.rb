@@ -33,6 +33,7 @@
 #  updated_at          :datetime
 #  admin               :boolean         default(FALSE), not null
 #  suspended_at        :datetime
+#  unconfirmed_email   :string(64)      default(""), not null
 #  reset_password_token    :string(255)
 #  reset_password_sent_at  :datetime
 #  remember_token          :string(255)
@@ -45,7 +46,7 @@
 
 class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
-         :encryptable, :recoverable, :rememberable, :trackable, stretches: 20
+         :encryptable, :recoverable, :rememberable, :trackable
 
   has_one :avatar, as: :entity, dependent: :destroy  # Personal avatar.
   has_many :avatars                                         # As owner who uploaded it, ex. Contact avatar.
@@ -150,8 +151,8 @@ class User < ActiveRecord::Base
     !persisted? || !password.nil? || !password_confirmation.nil?
   end
 
-  def destroyable?
-    check_if_current_user && !has_related_assets?
+  def destroyable?(user)
+    check_if_current_user(user) && !has_related_assets?
   end
 
   # Suspend newly created user if signup requires an approval.
@@ -164,7 +165,6 @@ class User < ActiveRecord::Base
   #----------------------------------------------------------------------------
   def check_if_current_user(user)
     user.nil? || user != self
-    # User.current_user.nil? || User.current_user != self
   end
 
   # Prevent deleting a user unless she has no artifacts left.

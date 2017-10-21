@@ -81,7 +81,7 @@ describe HomeController do
   #----------------------------------------------------------------------------
   describe "responding to GET options" do
     before(:each) do
-      require_user
+      login
     end
 
     it "should assign instance variables for user preferences" do
@@ -109,7 +109,7 @@ describe HomeController do
   #----------------------------------------------------------------------------
   describe "responding to GET redraw" do
     before(:each) do
-      require_user
+      login
     end
 
     it "should save user selected options" do
@@ -185,7 +185,7 @@ describe HomeController do
 
   describe "timeline" do
     before(:each) do
-      require_user
+      login
     end
 
     it "should collapse all comments and emails on a specific contact" do

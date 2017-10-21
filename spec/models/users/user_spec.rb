@@ -33,6 +33,7 @@
 #  updated_at          :datetime
 #  admin               :boolean         default(FALSE), not null
 #  suspended_at        :datetime
+#  unconfirmed_email   :string(64)      default(""), not null
 #  reset_password_token    :string(255)
 #  reset_password_sent_at  :datetime
 #  remember_token          :string(255)
