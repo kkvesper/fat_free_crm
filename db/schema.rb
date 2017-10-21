@@ -427,6 +427,7 @@ ActiveRecord::Schema.define(version: 20160511053730) do
     t.datetime "updated_at"
     t.boolean  "admin",                           default: false, null: false
     t.datetime "suspended_at"
+    t.string   "unconfirmed_email",   limit: 254
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "remember_token"

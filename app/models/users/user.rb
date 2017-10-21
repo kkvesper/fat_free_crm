@@ -9,7 +9,7 @@
 #
 #  id                  :integer         not null, primary key
 #  username            :string(32)      default(""), not null
-#  email               :string(64)      default(""), not null
+#  email               :string(254)     default(""), not null
 #  first_name          :string(32)
 #  last_name           :string(32)
 #  title               :string(64)
@@ -33,7 +33,7 @@
 #  updated_at          :datetime
 #  admin               :boolean         default(FALSE), not null
 #  suspended_at        :datetime
-#  unconfirmed_email   :string(64)      default(""), not null
+#  unconfirmed_email   :string(254)     default(""), not null
 #  reset_password_token    :string(255)
 #  reset_password_sent_at  :datetime
 #  remember_token          :string(255)
