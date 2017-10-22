@@ -16,13 +16,13 @@ feature 'Devise Sign-in' do
   end
 
   scenario 'without approval' do
-    @user.confirm!
+    @user.confirm
     login_process('john', 'password')
     page.should have_content("Your account has not been approved yet.")
   end
 
   scenario 'with approved and confirmed account' do
-    @user.confirm!
+    @user.confirm
     @user.update_attribute(:suspended_at, nil)
     login_process('john', 'password')
     page.should have_content("Signed in successfully.")
@@ -35,8 +35,8 @@ feature 'Devise Sign-in' do
   end
 
   def login_process(username, password)
-    visit '/login'
-    fill_in 'user[username]', with: username
+    visit '/users/sign_in'
+    fill_in 'user[email]', with: username
     fill_in 'user[password]', with: password
     click_button 'Login'
   end

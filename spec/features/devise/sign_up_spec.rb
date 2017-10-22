@@ -2,7 +2,7 @@ require 'features/acceptance_helper'
 
 feature 'Devise Sign-up' do
   scenario 'with valid credentials' do
-    visit "/signup"
+    visit "/users/sign_up"
 
     fill_in "user[email]", with: "john@example.com"
     fill_in "user[username]", with: "john"
@@ -10,12 +10,12 @@ feature 'Devise Sign-up' do
     fill_in "user[password_confirmation]", with: "password"
     click_button("Sign Up")
 
-    current_path.should == "/login"
+    current_path.should == "/users/sign_in"
     page.should have_content("A message with a confirmation link has been sent to your email address. Please open the link to activate your account.")
   end
 
   scenario 'without credentials' do
-    visit "/signup"
+    visit "/users/sign_in"
     click_button("Sign Up")
 
     page.should have_content("5 errors prohibited this User from being saved")
