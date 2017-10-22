@@ -240,53 +240,53 @@ describe UsersController do
   #----------------------------------------------------------------------------
   describe "responding to PUT change_password" do
     before(:each) do
-      login
-      @user = current_user
-      @new_password = "secret?!"
+      @old_password = 'foobar123'
+      @user = FactoryGirl.create(:user, password: @old_password, password_confirmation: @old_password)
+      perform_login(@user)
+      @old_encrypted_password = @user.encrypted_password
+      @new_password = 'secret?!'
     end
 
-    let!(:old_encrypted_password){ current_user.encrypted_password }
-
     it "should set new user password" do
-      put :change_password, params: { id: @user.id, current_password: @user.password, user: { password: @new_password, password_confirmation: @new_password } }, xhr: true
-      expect(assigns[:user]).to eq(current_user)
-      expect(current_user.password).to eq(nil)
-      # expect(current_user.reload.encrypted_password).to_not eq(old_encrypted_password) # password change
-      expect(current_user.errors).to be_empty
+      put :change_password, params: { id: @user.id, current_password: @old_password, user: { password: @new_password, password_confirmation: @new_password } }, xhr: true
+      expect(assigns[:user]).to eq(@user)
+      expect(assigns[:user].password).to eq('secret?!')
+      expect(assigns[:user].errors).to be_empty
+      expect(assigns[:user].reload.encrypted_password).to_not eq(@old_encrypted_password) # password change
       expect(response).to render_template("users/change_password")
     end
 
-    it "should allow to change password if current password is blank" do
-      @user.encrypted_password = nil
+    it "should not allow to change password if current password is blank" do
+      current_user.encrypted_password = nil
       put :change_password, params: { id: @user.id, current_password: "", user: { password: @new_password, password_confirmation: @new_password } }, xhr: true
-      expect(current_user.password).to eq(nil)
-      # expect(current_user.reload.encrypted_password).to_not eq(old_encrypted_password) # password change
-      expect(current_user.errors).to be_empty
+      expect(assigns[:user].password).to eq(nil)
+      expect(assigns[:user].errors.size).to eq(1) # .error_on(:current_password)
+      expect(assigns[:user].reload.encrypted_password).to eq(@old_encrypted_password) # password stays the same
       expect(response).to render_template("users/change_password")
     end
 
     it "should not change user password if password field is blank" do
-      put :change_password, params: { id: @user.id, current_password: @user.password, user: { password: "", password_confirmation: "" } }, xhr: true
+      put :change_password, params: { id: @user.id, current_password: @old_password, user: { password: "", password_confirmation: "" } }, xhr: true
       expect(assigns[:user]).to eq(current_user)
-      expect(current_user.password).to eq(nil)
-      # expect(current_user.reload.encrypted_password).to eq(old_encrypted_password) # password stays the same
-      expect(current_user.errors).to be_empty # no errors
+      expect(assigns[:user].password).to eq(nil)
+      expect(assigns[:user].errors).to be_empty # no errors
+      expect(assigns[:user].reload.encrypted_password).to eq(@old_encrypted_password) # password stays the same
       expect(response).to render_template("users/change_password")
     end
 
     it "should require valid current password" do
       put :change_password, params: { id: @user.id, current_password: "what?!", user: { password: @new_password, password_confirmation: @new_password } }, xhr: true
-      expect(current_user.password).to eq(nil)
-      # expect(current_user.reload.encrypted_password).to eq(old_encrypted_password) # password stays the same
-      # expect(current_user.errors.size).to eq(1) # .error_on(:current_password)
+      expect(assigns[:user].password).to eq(nil)
+      expect(assigns[:user].errors.size).to eq(1) # .error_on(:current_password)
+      expect(assigns[:user].reload.encrypted_password).to eq(@old_encrypted_password) # password stays the same
       expect(response).to render_template("users/change_password")
     end
 
     it "should require new password and password confirmation to match" do
-      put :change_password, params: { id: @user.id, current_password: @user.password, user: { password: @new_password, password_confirmation: "none" } }, xhr: true
-      expect(current_user.password).to eq(nil)
-      # expect(current_user.reload.encrypted_password).to eq(old_encrypted_password) # password stays the same
-      # expect(current_user.errors.size).to eq(1) # .error_on(:current_password)
+      put :change_password, params: { id: @user.id, current_password: @old_password, user: { password: @new_password, password_confirmation: "none" } }, xhr: true
+      expect(assigns[:user].password).to eq('secret?!')
+      expect(assigns[:user].errors.size).to eq(1) # .error_on(:current_password)
+      expect(assigns[:user].reload.encrypted_password).to eq(@old_encrypted_password) # password stays the same
       expect(response).to render_template("users/change_password")
     end
   end
