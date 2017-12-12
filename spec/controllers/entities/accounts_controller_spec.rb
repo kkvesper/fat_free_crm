@@ -11,7 +11,7 @@ describe AccountsController do
   end
 
   before do
-    require_user
+    login
     set_current_tab(:accounts)
   end
 

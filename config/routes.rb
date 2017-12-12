@@ -8,12 +8,18 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  devise_for :users, controllers: {registrations: 'registrations',
+                                   sessions: 'sessions',
+                                   passwords: 'passwords',
+                                   confirmations: 'confirmations'}
+
+  devise_scope :user do
+    resources :users, only: [:index, :show]
+  end
+
   get 'activities' => 'home#index'
-  get 'admin'      => 'admin/users#index',       :as => :admin
-  get 'login'      => 'authentications#new',     :as => :login
-  delete 'logout'  => 'authentications#destroy', :as => :logout
-  get 'profile'    => 'users#show',              :as => :profile
-  get 'signup'     => 'users#new',               :as => :signup
+  get 'admin'      => 'admin/users#index',       as: :admin
+  get 'profile'    => 'users#show',              as: :profile
 
   get '/home/options',  as: :options
   get '/home/toggle',   as: :toggle
@@ -21,10 +27,8 @@ Rails.application.routes.draw do
   match '/home/timezone', as: :timezone, via: [:get, :put, :post]
   post '/home/redraw',   as: :redraw
 
-  resource :authentication, except: [:index, :edit]
   resources :comments,       except: [:new, :show]
   resources :emails,         only: [:destroy]
-  resources :passwords,      only: [:new, :create, :edit, :update]
 
   resources :accounts, id: /\d+/ do
     collection do
@@ -137,7 +141,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, id: /\d+/, except: [:index, :destroy] do
+  resources :users, id: /\d+/, except: [:index, :destroy, :create] do
     member do
       get :avatar
       get :password

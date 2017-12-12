@@ -4,7 +4,6 @@
 # See MIT-LICENSE file or http://www.opensource.org/licenses/mit-license.php
 #------------------------------------------------------------------------------
 class EntitiesController < ApplicationController
-  before_action :require_user
   before_action :set_current_tab, only: [:index, :show]
   before_action :set_view, only: [:index, :show, :redraw]
 
@@ -109,7 +108,7 @@ class EntitiesController < ApplicationController
 
   #----------------------------------------------------------------------------
   def entities
-    instance_variable_get("@#{controller_name}") || klass.my
+    instance_variable_get("@#{controller_name}") || klass.my(current_user)
   end
 
   def set_options

@@ -11,7 +11,7 @@ describe OpportunitiesController do
   end
 
   before do
-    require_user
+    login
     set_current_tab(:opportunities)
   end
 

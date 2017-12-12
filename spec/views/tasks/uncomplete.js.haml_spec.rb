@@ -9,7 +9,7 @@ describe "/tasks/uncomplete" do
   include TasksHelper
 
   before do
-    login_and_assign
+    login
     assign(:bucket, [])
   end
 

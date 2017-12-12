@@ -9,7 +9,7 @@
 #
 #  id                  :integer         not null, primary key
 #  username            :string(32)      default(""), not null
-#  email               :string(64)      default(""), not null
+#  email               :string(254)     default(""), not null
 #  first_name          :string(32)
 #  last_name           :string(32)
 #  title               :string(64)
@@ -21,30 +21,39 @@
 #  yahoo               :string(32)
 #  google              :string(32)
 #  skype               :string(32)
-#  password_hash       :string(255)     default(""), not null
+#  encrypted_password  :string(255)     default(""), not null
 #  password_salt       :string(255)     default(""), not null
-#  persistence_token   :string(255)     default(""), not null
-#  perishable_token    :string(255)     default(""), not null
-#  last_login_at       :datetime
-#  current_login_at    :datetime
-#  last_login_ip       :string(255)
-#  current_login_ip    :string(255)
-#  login_count         :integer         default(0), not null
+#  last_sign_in_at     :datetime
+#  current_sign_in_at  :datetime
+#  last_sign_in_ip     :string(255)
+#  current_sign_in_ip  :string(255)
+#  sign_in_count       :integer         default(0), not null
 #  deleted_at          :datetime
 #  created_at          :datetime
 #  updated_at          :datetime
 #  admin               :boolean         default(FALSE), not null
 #  suspended_at        :datetime
-#  single_access_token :string(255)
+#  unconfirmed_email   :string(254)     default(""), not null
+#  reset_password_token    :string(255)
+#  reset_password_sent_at  :datetime
+#  remember_token          :string(255)
+#  remember_created_at     :datetime
+#  authentication_token    :string(255)
+#  confirmation_token      :string(255)
+#  confirmed_at            :datetime
+#  confirmation_sent_at    :datetime
 #
 
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe User do
+
+  let(:current_user){ FactoryGirl.build(:user) }
+
   it "should create a new instance given valid attributes" do
     expect(User.new(
       username: "username",
-      email:    "user@example.com",
+      email: "user@example.com",
       password: "password",
       password_confirmation: "password"
     ).valid?).to eq true
@@ -54,7 +63,7 @@ describe User do
     expect(FactoryGirl.build(:user)).to be_valid
   end
 
-  describe '#destroyable?' do
+  describe '#destroyable?(current_user)' do
     describe "Destroying users with and without related assets" do
       before do
         @user = FactoryGirl.build(:user)
@@ -64,30 +73,27 @@ describe User do
         it "should not destroy the user if she owns #{asset}" do
           FactoryGirl.create(asset, user: @user)
 
-          expect(@user.destroyable?).to eq(false)
+          expect(@user.destroyable?(current_user)).to eq(false)
         end
 
         it "should not destroy the user if she has #{asset} assigned" do
           FactoryGirl.create(asset, assignee: @user)
-          expect(@user.destroyable?).to eq(false)
+          expect(@user.destroyable?(current_user)).to eq(false)
         end
       end
 
       it "should not destroy the user if she owns a comment" do
-        login
         account = build(:account, user: current_user)
         FactoryGirl.create(:comment, user: @user, commentable: account)
-        expect(@user.destroyable?).to eq(false)
+        expect(@user.destroyable?(current_user)).to eq(false)
       end
 
       it "should not destroy the current user" do
-        login
-
-        expect(current_user.destroyable?).to eq(false)
+        expect(current_user.destroyable?(current_user)).to eq(false)
       end
 
       it "should destroy the user" do
-        expect(@user.destroyable?).to eq(true)
+        expect(@user.destroyable?(current_user)).to eq(true)
       end
     end
   end
@@ -205,22 +211,6 @@ describe User do
       @user.preference[:locale] = nil
       @user.set_individual_locale
       expect(I18n.locale).to eq(@locale)
-    end
-  end
-
-  describe "Setting single access token" do
-    it "should update single_access_token attribute if it is not set already" do
-      @user = FactoryGirl.build(:user, single_access_token: nil)
-
-      @user.set_single_access_token
-      expect(@user.single_access_token).not_to eq(nil)
-    end
-
-    it "should not update single_access_token attribute if it is set already" do
-      @user = FactoryGirl.build(:user, single_access_token: "token")
-
-      @user.set_single_access_token
-      expect(@user.single_access_token).to eq("token")
     end
   end
 
