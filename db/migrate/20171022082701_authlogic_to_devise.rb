@@ -1,4 +1,4 @@
-class AuthlogicToDevise < ActiveRecord::Migration
+class AuthlogicToDevise < ActiveRecord::Migration[4.2]
   def self.up
     add_column :users, :unconfirmed_email, :string, limit: 254
     add_column :users, :reset_password_token, :string
