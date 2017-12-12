@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'rails',               '~> 5.1.0'
   gem.add_dependency 'rails-observers'
+  gem.add_dependency 'activemodel-serializers-xml'
   gem.add_dependency 'sprockets-rails',     '>= 3.0.0'
   gem.add_dependency 'responders',          '~> 2.0'
   gem.add_dependency 'jquery-rails'
